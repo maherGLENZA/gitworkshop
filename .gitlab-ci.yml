@@ -1,0 +1,21 @@
+stages:
+    -build
+
+dev-build:
+  stage: build
+  script:
+    - docker build -t myapp.
+  except:
+    - main
+    - tag
+  only:
+    -merge_request
+staging-build:
+  stage: build
+  script:
+    - docker build -t myapp:latest
+    - docker push $CI_REGISTRY_IMAGE
+  only:
+    - master
+prod-build:
+  stage: build
